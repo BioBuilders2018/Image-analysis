@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 def PolyArea(x,y):
-    return 0.5*np.abs(np.dot(x,np.roll(y,1))-np.dot(y,np.roll(x,1)))
+	return 0.5*np.abs(np.dot(x,np.roll(y,1))-np.dot(y,np.roll(x,1)))
 def CircleArea(r):
 	return np.pi*np.square(r)
 def EllipseArea(rx, ry):
@@ -12,7 +12,7 @@ def EllipseArea(rx, ry):
 
 # ANNOTATIONS MADE BY PROGRAM VIA
 # http://www.robots.ox.ac.uk/~vgg/software/via/
-org_df = pd.DataFrame.from_csv('../data/annotations.csv', sep = ",", index_col = None)
+org_df = pd.read_csv('data/annotations.csv', sep = ",", index_col = None)
 
 # can drop file size, file attributes
 org_df = org_df.drop(['file_size', 'file_attributes', 'region_attributes'], axis = 1)
@@ -43,12 +43,11 @@ for i, row in org_df.iterrows():
 
 	if 'dark' in row["filename"] or 'light' in row["filename"]:
 		species = "".join(fileSplit[1])
-		temp = fileSplit[2]
-		light = fileSplit[3]
-		dupl = fileSplit[-1].replace('.jpg', '').replace('#', '')
+		temp = fileSplit[2].strip('C')
+		light = fileSplit[3].strip('.jpg')
+		dupl = 1
 
 		tempLightDict.append({'species': species, 'temperature': temp, 'light_source': light, 'date': date, 'dupl': dupl, 'area': area})
-		# [species].append([temp, light, date, dupl, area])
 
 	else:
 		try:
@@ -58,17 +57,15 @@ for i, row in org_df.iterrows():
 			dupl = fileSplit[4].replace('.jpg', '').replace('#', '')
 		except IndexError:
 			conc = None
-			species = "".join(fileSplit[2])
+			species = "".join(fileSplit[2]).replace('.jpg', '')
 			dupl = 1
 
-		print(species, conc, medium)
-
 		mediaDict.append({'species': species, 'medium': medium, 'concentration': conc, 'date': date, 'dupl': dupl, 'area': area})
-		#[species].append([medium, conc, date, dupl, area])
-
 
 df1 = pd.DataFrame(mediaDict)
-df1.to_csv('../data/medium_growths.csv', sep = "\t")
+df1.to_csv('data/medium_growths.csv', sep = ",")
+df1.to_excel('data/medium_growths.xlsx')
 
 df2 = pd.DataFrame(tempLightDict)
-df1.to_csv('../data/tempLight_growths.csv', sep = "\t")
+df2.to_csv('data/tempLight_growths.csv', sep = ",")
+df2.to_excel('data/tempLight_growths.xlsx')
