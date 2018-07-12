@@ -1,8 +1,5 @@
 # Image analysis of culture growth on petris dishes
-Take an image of a petris dish with cultures and detect the culture circle.
-
-Example (best so far):
-![example](test.png)
+Take an image of a petris dish with cultures and detect the culture circle. Based on that calculate the area and the growth differences on daily basis.
 
 # Setup virtual environment
 ## Install virtual environment
@@ -15,33 +12,24 @@ pip install virtualenv
 pip install -r requirements.txt
 ```
 
-# Run code
-Crop pictures (not needed, I think?)
-```
-$ python petrisCropper.py --help
-usage: petrisCropper.py [-h] -c CIRCLESIZE
+# Detect circles in pictures with VIA
+VIA: VGG Image Annotator (VIA)
+can be downloaded from  [here](http://www.robots.ox.ac.uk/~vgg/software/via/).
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -c CIRCLESIZE, --circlesize CIRCLESIZE
-                        Size of circle
+Rename all pictures and put it into the same folder. Do this by running
 ```
-run example:
-```
-python petrisCropper.py -c 1000
+python src/renaming.py
 ```
 
-Detect circles (cultures)
-```
-$ python colorManipulator.py --help
-usage: colorManipulator.py [-h] -i IMAGE
+Then use VIA to circle all the colonies. An example of this looks like the picture below.
+![example](test.png)
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -i IMAGE, --image IMAGE
-                        path to image
+After all (!) pictures have been annotated, run dataWrangler.py to format the annotation.csv into a nice data frame for further use.
+**needs an update**
 ```
-run example:
+python src/dataWrangler.py
 ```
-python colorManipulator.py -i cropped_pic/23-06-2018_plates/MEA_47.5_Sc_#1.jpg
-```
+
+# Draw nice plots with bokeh
+Run the notebook, which will create super nice interactive bokeh plots!
+See the data/growth_media.html as an example.
