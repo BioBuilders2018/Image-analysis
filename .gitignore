@@ -59,6 +59,8 @@ target/
 
 # Jupyter notebooks
 */.ipynb_checkpoints
+yarn*
+node_modules/*
 
 # Folders
 *pic/

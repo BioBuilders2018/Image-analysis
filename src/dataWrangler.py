@@ -1,5 +1,4 @@
 #!/user/bin/python3
-
 import pandas as pd
 import numpy as np
 
@@ -47,7 +46,7 @@ for i, row in org_df.iterrows():
 		light = fileSplit[3].strip('.jpg')
 		dupl = 1
 
-		tempLightDict.append({'species': species, 'temperature': temp, 'light_source': light, 'date': date, 'dupl': dupl, 'area': area})
+		tempLightDict.append({'species': species, 'temperature': temp, 'light_source': light, 'date': date, 'dupl': dupl, 'area': area, 'medium': 'PDA', 'concentration': 58.5})
 
 	else:
 		try:
@@ -60,12 +59,13 @@ for i, row in org_df.iterrows():
 			species = "".join(fileSplit[2]).replace('.jpg', '')
 			dupl = 1
 
-		mediaDict.append({'species': species, 'medium': medium, 'concentration': conc, 'date': date, 'dupl': dupl, 'area': area})
+		mediaDict.append({'species': species, 'medium': medium, 'concentration': conc, 'date': date, 'dupl': dupl, 'area': area, 'temperature': 30, 'light_source': 'dark'})
 
 df1 = pd.DataFrame(mediaDict)
-df1.to_csv('data/medium_growths.csv', sep = ",")
-df1.to_excel('data/medium_growths.xlsx')
+df1.to_csv('data/medium_growths.csv', sep = ",", index = False)
 
 df2 = pd.DataFrame(tempLightDict)
-df2.to_csv('data/tempLight_growths.csv', sep = ",")
-df2.to_excel('data/tempLight_growths.xlsx')
+df2.to_csv('data/tempLight_growths.csv', sep = ",", index = False)
+
+df3 = pd.merge(df1, df2, how = 'outer')
+df3.to_csv('data/merged_data.csv', sep = ",", index = False)
